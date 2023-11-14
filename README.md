@@ -1,19 +1,32 @@
-## Foundry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+# Fuzz Test
 
-Foundry consists of:
+This repo holds all the projects I will be learning Fuzz Test on. 
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+I will be picking a Live project and write a Uint & Fuzz Test
 
-## Documentation
+## Projects
 
-https://book.getfoundry.sh/
+Here are the protocols I wrote test for:
 
-## Usage
+- [Company 1]()
+
+
+## 🚀 About Me
+Blockchain developer specialise in Blockhain security
+-----------------------------------------------------
+
+*   🔐 Smart Contract Auditor | Solidity
+*   👨‍🔬 Blockchain Engineer
+*   📫 You can reach me for consulting and audits on [X](https://twitter.com/0xFave), [Cantina](https://cantina.xyz/u/0xfave), [C4](https://code4rena.com/@0xfave)
+*   🤝  I'm open to collaborating on Smart contract development and Audits
+*   ⚡  I love working on AMMs, DEXs, Perpetual Dex, Intent Centric Protocols
+## Acknowledgements
+
+ - [echidna tutorial from TOB](https://github.com/crytic/echidna-streaming-series)
+
+
+## Run Locally
 
 ### Build
 
@@ -64,3 +77,10 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+## Tech Stack
+
+**Unit Test:** Foundry
+
+**Fully automated analysis:** Slither, Aderyn
+
+**Semi automated analysis:** Echidna
