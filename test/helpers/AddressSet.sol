@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity 0.8.19;
+pragma solidity 0.8.23;
 
 struct AddressSet {
     address[] addrs;
@@ -14,10 +14,7 @@ library LibAddressSet {
         }
     }
 
-    function contains(
-        AddressSet storage s,
-        address addr
-    ) internal view returns (bool) {
+    function contains(AddressSet storage s, address addr) internal view returns (bool) {
         return s.saved[addr];
     }
 
@@ -25,10 +22,7 @@ library LibAddressSet {
         return s.addrs.length;
     }
 
-    function forEach(
-        AddressSet storage s,
-        function(address) external func
-    ) internal {
+    function forEach(AddressSet storage s, function(address) external func) internal {
         for (uint256 i; i < s.addrs.length; ++i) {
             func(s.addrs[i]);
         }
@@ -38,17 +32,17 @@ library LibAddressSet {
         AddressSet storage s,
         uint256 acc,
         function(uint256, address) external returns (uint256) func
-    ) internal returns (uint256) {
+    )
+        internal
+        returns (uint256)
+    {
         for (uint256 i; i < s.addrs.length; ++i) {
             acc = func(acc, s.addrs[i]);
         }
         return acc;
     }
 
-    function rand(
-        AddressSet storage s,
-        uint256 seed
-    ) internal view returns (address) {
+    function rand(AddressSet storage s, uint256 seed) internal view returns (address) {
         if (s.addrs.length > 0) {
             return s.addrs[seed % s.addrs.length];
         } else {

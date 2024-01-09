@@ -1,7 +1,19 @@
 {
-    "wake.compiler.solc.remappings": [
-        "ds-test/=lib/forge-std/lib/ds-test/src/",
-        "forge-std/=lib/forge-std/src/",
-        "vulcan/=lib/vulcan/src/"
-    ]
+  "[solidity]": {
+    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "solidity.formatter": "forge",
+  "wake.compiler.solc.remappings": [
+    "@openzeppelin/contracts/=node_modules/@openzeppelin/contracts/",
+    "@prb/test/=node_modules/@prb/test/",
+    "forge-std/=node_modules/forge-std/src/",
+    "@chainlink/=node_modules/@chainlink/",
+    "@eth-optimism/=node_modules/@eth-optimism/",
+    "ds-test/=lib/forge-std/lib/ds-test/src/",
+    "foundry-devops/=lib/foundry-devops/",
+    "vulcan/=lib/vulcan/src/"
+  ]
 }

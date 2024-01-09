@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity 0.8.19;
+pragma solidity 0.8.23;
 
-import {Test} from "forge-std/Test.sol";
-import {WETH9} from "../src/WETH9.sol";
-import {Handler} from "./handlers/Handler.sol";
+import { Test } from "forge-std/Test.sol";
+import { WETH9 } from "../src/WETH9.sol";
+import { Handler } from "./handlers/Handler.sol";
 
 contract WETH9Invariants is Test {
     WETH9 public weth;
@@ -22,10 +22,7 @@ contract WETH9Invariants is Test {
         selectors[5] = Handler.transferFrom.selector;
         selectors[6] = Handler.forcePush.selector;
 
-        targetSelector(FuzzSelector({
-            addr: address(handler), 
-            selectors: selectors
-        }));
+        targetSelector(FuzzSelector({ addr: address(handler), selectors: selectors }));
 
         targetContract(address(weth));
     }
@@ -49,10 +46,7 @@ contract WETH9Invariants is Test {
     // ETH balance plus the WETH totalSupply() should always
     // equal the total ETH_SUPPLY
     function invariant_conservationOfETH() external {
-        assertEq(
-            handler.ETH_SUPPLY(),
-            address(handler).balance + weth.totalSupply()
-        );
+        assertEq(handler.ETH_SUPPLY(), address(handler).balance + weth.totalSupply());
     }
 
     // The WETH contract's Ether balance should always be
@@ -62,9 +56,7 @@ contract WETH9Invariants is Test {
     function invariant_solvencyDeposits() public {
         assertEq(
             address(weth).balance,
-            handler.ghost_depositSum() +
-            handler.ghost_forcePushSum() -
-            handler.ghost_withdrawSum()
+            handler.ghost_depositSum() + handler.ghost_forcePushSum() - handler.ghost_withdrawSum()
         );
     }
 
@@ -72,20 +64,11 @@ contract WETH9Invariants is Test {
     // equal to the sum of individual balances plus any
     // force-pushed Ether in the contract
     function invariant_solvencyBalances() public {
-        uint256 sumOfBalances = handler.reduceActors(
-            0, 
-            this.accumulateBalance
-        );
-        assertEq(
-            address(weth).balance - handler.ghost_forcePushSum(),
-            sumOfBalances
-        );
+        uint256 sumOfBalances = handler.reduceActors(0, this.accumulateBalance);
+        assertEq(address(weth).balance - handler.ghost_forcePushSum(), sumOfBalances);
     }
 
-    function accumulateBalance(
-        uint256 balance,
-        address caller
-    ) external view returns (uint256) {
+    function accumulateBalance(uint256 balance, address caller) external view returns (uint256) {
         return balance + weth.balanceOf(caller);
     }
 

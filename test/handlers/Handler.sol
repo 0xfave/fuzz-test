@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity 0.8.19;
+pragma solidity 0.8.23;
 
-import {WETH9} from "../../src/WETH9.sol";
-import {CommonBase} from "forge-std/Base.sol";
-import {StdCheats} from "forge-std/StdCheats.sol";
-import {StdUtils} from "forge-std/StdUtils.sol";
-import {AddressSet, LibAddressSet} from "../helpers/AddressSet.sol";
-import {console} from "forge-std/console.sol";
+import { WETH9 } from "../../src/WETH9.sol";
+import { CommonBase } from "forge-std/Base.sol";
+import { StdCheats } from "forge-std/StdCheats.sol";
+import { StdUtils } from "forge-std/StdUtils.sol";
+import { AddressSet, LibAddressSet } from "../helpers/AddressSet.sol";
+import { console } from "forge-std/console.sol";
 
 contract ForcePush {
     constructor(address dst) payable {
@@ -66,15 +66,12 @@ contract Handler is CommonBase, StdCheats, StdUtils {
         _pay(currentActor, amount);
 
         vm.prank(currentActor);
-        weth.deposit{value: amount}();
+        weth.deposit{ value: amount }();
 
         ghost_depositSum += amount;
     }
 
-    function withdraw(
-        uint256 actorSeed,
-        uint256 amount
-    ) public useActor(actorSeed) countCall("withdraw") {
+    function withdraw(uint256 actorSeed, uint256 amount) public useActor(actorSeed) countCall("withdraw") {
         amount = bound(amount, 0, weth.balanceOf(currentActor));
         if (amount == 0) ghost_zeroWithdrawals++;
 
@@ -91,14 +88,14 @@ contract Handler is CommonBase, StdCheats, StdUtils {
         _pay(currentActor, amount);
 
         vm.prank(currentActor);
-        (bool success, ) = address(weth).call{value: amount}("");
+        (bool success,) = address(weth).call{ value: amount }("");
 
         require(success, "sendFallback failed");
         ghost_depositSum += amount;
     }
 
     function _pay(address to, uint256 amount) internal {
-        (bool s, ) = to.call{value: amount}("");
+        (bool s,) = to.call{ value: amount }("");
         require(s, "pay() failed");
     }
 
@@ -113,7 +110,10 @@ contract Handler is CommonBase, StdCheats, StdUtils {
     function reduceActors(
         uint256 acc,
         function(uint256, address) external returns (uint256) func
-    ) public returns (uint256) {
+    )
+        public
+        returns (uint256)
+    {
         return _actors.reduce(acc, func);
     }
 
@@ -121,7 +121,11 @@ contract Handler is CommonBase, StdCheats, StdUtils {
         uint256 actorSeed,
         uint256 spenderSeed,
         uint256 amount
-    ) public useActor(actorSeed) countCall("approve") {
+    )
+        public
+        useActor(actorSeed)
+        countCall("approve")
+    {
         address spender = _actors.rand(spenderSeed);
 
         vm.prank(currentActor);
@@ -132,7 +136,11 @@ contract Handler is CommonBase, StdCheats, StdUtils {
         uint256 actorSeed,
         uint256 toSeed,
         uint256 amount
-    ) public useActor(actorSeed) countCall("transfer") {
+    )
+        public
+        useActor(actorSeed)
+        countCall("transfer")
+    {
         address to = _actors.rand(toSeed);
 
         amount = bound(amount, 0, weth.balanceOf(currentActor));
@@ -147,7 +155,11 @@ contract Handler is CommonBase, StdCheats, StdUtils {
         uint256 toSeed,
         bool _approve,
         uint256 amount
-    ) public useActor(actorSeed) countCall("transferFrom") {
+    )
+        public
+        useActor(actorSeed)
+        countCall("transferFrom")
+    {
         address from = _actors.rand(fromSeed);
         address to = _actors.rand(toSeed);
 
@@ -164,13 +176,11 @@ contract Handler is CommonBase, StdCheats, StdUtils {
         weth.transferFrom(from, to, amount);
     }
 
-    function forcePush(
-        uint256 amount
-    ) public countCall("forcePush") {
+    function forcePush(uint256 amount) public countCall("forcePush") {
         amount = bound(amount, 0, address(this).balance);
         new ForcePush{ value: amount }(address(weth));
         ghost_forcePushSum += amount;
     }
 
-    receive() external payable {}
+    receive() external payable { }
 }
